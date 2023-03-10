@@ -1,0 +1,77 @@
+((x,y, shaded=20)=>{
+	x -= 0.5+Math.random()/2000+sin(60*PI*y)/600;
+	y -= 0.5+Math.random()/2000+cos(60*PI*x)/600;
+	x *= 25;
+	y *= 25;
+	const m = 5
+	let scale = 1/m;//2/m;
+	let sum = 0;
+	for (let i=0; i<m; i++){
+		let subtotal = Math.abs(sin(2*Math.PI*(scale*(x*cos(Math.PI*i/m)+y*sin(Math.PI*i/m)))));
+		subtotal = round(subtotal*12)/12;
+		sum += subtotal;
+	}
+	sum /= m;
+	sum -= Math.round(sum);
+
+return [1-(Math.abs(sum)),sum*(1-sum),0.5*Math.round(sum*8)/8];
+})
+
+((x,y, shaded=20)=>{
+	x -= 0.5+Math.random()/400//+sin(60*PI*y)/200;
+	y -= 0.5+Math.random()/400//+cos(60*PI*x)/200;
+	x *= 45;
+	y *= 45;
+	const m = 6
+	let scale = 1/m;//2/m;
+	let sum = 0;
+	for (let i=0; i<m; i++){
+		let subtotal = Math.abs(cos(2*Math.PI*(scale*(x*cos(Math.PI*i/m)+y*sin(Math.PI*i/m)))));
+		subtotal = round(subtotal*7)/7;
+		sum += subtotal;
+	}
+	sum /= m;
+	sum -= Math.round(sum);
+
+return [((sum)),0.75*0.25*sum*(1-sum),Math.round(sum*5)/5];
+})
+
+((x,y, shaded=20)=>{
+	x -= 0.5+Math.random()/400//+sin(60*PI*y)/200;
+	y -= 0.5+Math.random()/400//+cos(60*PI*x)/200;
+	const s=300
+	x *= s;
+	y *= s;
+	const m = 18
+	let scale = 1/m;//2/m;
+	let sum = 0;
+	for (let i=0; i<m; i++){
+		let subtotal = Math.abs(cos(2*Math.PI*(scale*(x*cos(Math.PI*i/m)+y*sin(Math.PI*i/m)))));
+		subtotal = round(subtotal*99)/99;
+		sum += subtotal;
+	}
+	sum /= m;
+	sum -= Math.round(sum);
+
+return [((1+sum)),0.5*0.065*sum*(1-sum),1-Math.round(sum*32)/3];
+})
+
+((x,y, shaded=20)=>{
+	x -= 0.5+Math.random()/400//+sin(200000000000000*PI*y)/2000000000;
+	y -= 0.5+Math.random()/400//+cos(60*PI*x)/200;
+	const s=30
+	x *= s;
+	y *= s;
+	const m = 5.01
+	let scale = 1/m;//2/m;
+	let sum = 0;
+	for (let i=0; i<m; i++){
+		let subtotal = Math.abs(cos(2*Math.PI*(scale*(x*cos(Math.PI*i/m)+y*sin(Math.PI*i/m)))));
+		subtotal = round(subtotal*20)/30;
+		sum += subtotal;
+	}
+	sum /= m;
+	sum -= Math.round(sum);
+
+return [((0.6*sum)),sum*(1-sum),0.5-Math.round(sum*32)/3];
+})

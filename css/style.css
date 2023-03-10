@@ -1,0 +1,19 @@
+textarea {
+	height: 100px;
+	overflow: true;
+	resize: none;
+}
+
+.fnList {
+	display: flex;
+	flex-direction: column-reverse;
+	align-items: flex-start;
+}
+
+.fnEntry {
+	display: flex;
+	flex: none;
+	height: 100%;
+	width: 100%;
+	border: 1px solid black;
+}
