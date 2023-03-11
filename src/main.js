@@ -10,6 +10,15 @@ const floor = Math.floor;
 const round = Math.round;
 const PI = Math.PI;
 
+const initCanvasSize = () => {
+	const canvasSizeInput = document.createElement("input");
+	canvasSizeInput.setAttribute("type", "number");
+	canvasSizeInput.setAttribute("value", "512");
+	document.body.appendChild(canvasSizeInput);
+
+	return canvasSizeInput;
+}
+
 const initCanvas = ()=>{
 	const canvas = document.createElement("canvas");
 	canvas.setAttribute("style","border:1px solid black")
@@ -24,10 +33,10 @@ const initViewport = (size)=>{
 	return viewport;
 }
 const initMainViewport = ()=>{
-	return initViewport(400);
+	return initViewport(600);
 }
 const initPreviewViewport = ()=>{
-	return initViewport(100);
+	return initViewport(300);
 }
 const initBtn = (text)=>{
 	const submitBtn = document.createElement("button");
@@ -51,14 +60,17 @@ const initDataURLField = ()=>{
 	return URLfield;
 }
 const initFnEntry = (fnText)=>{
-
+console.log(fnText);
 	const entry = document.createElement("div");
 	const viewport = initPreviewViewport();
-	const codeText = document.createElement("p");
-
-	codeText.innerHTML=fnText;
+	const codeText = document.createElement("div");
+	codeText.setAttribute("class", "codetext");
+	codeText.innerText=fnText;
+	console.log("fntext\n",fnText)
+	console.log("codetext\n", codeText.innerText);
 	entry.appendChild(viewport.canvas);		try {
 		viewport.plotFunctionRGB(eval(fnText));
+		//viewport.plotFunctionRGB(eval(fnText));
 	} catch (e) {
 		console.log(e);
 	}
@@ -99,6 +111,7 @@ const main = ()=>{
 	// }
 	//initFnList(fns);
 	const mainViewport = initMainViewport();
+	const canvasSizeInput = initCanvasSize();
 	const fnList = initFnList();
 	const previewViewport = initPreviewViewport();
 	const submitBtn = initBtn("Render");
@@ -114,7 +127,7 @@ const main = ()=>{
 		localStorage.setItem("function", fnInput.value);
 		mainViewport.plotFunctionRGB(eval(fnInput.value));
 	});
-
+	canvasSizeInput.oninput = ((e)=>{mainViewport.resize(e.target.valueAsNumber,e.target.valueAsNumber)})
 	saveBtn.onclick = ((e) => {
 		//
 		const json = localStorage.getItem("fns");

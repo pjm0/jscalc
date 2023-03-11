@@ -46,18 +46,10 @@ class Viewport {
         this.buffer = new Uint32Array(this.img.data.buffer);
     }
 
-    // drawPixelRGB(x, y, colorRGB) {
-    //     let colorHex = (0xFF000000 +
-    //       Math.floor(colorRGB[0] * 255) * 0x00010000 +
-    //       Math.floor(colorRGB[1] * 255) * 0x00000100 +
-    //       Math.floor(colorRGB[2] * 255));
-
-    //     this.buffer[x + y * this.width] = colorHex;
-    // }
-
     drawPixel(x, y, color) {
         this.buffer[x + y * this.width] = color;
     }
+    
     plotFunctionRGB(f, samples=10, fuzz=1) {
 
         for (let i=0; i<this.width; i++) {

@@ -1,19 +1,34 @@
+body {
+/*		display: flex;
+	flex-direction: column;*/
+}
+
 textarea {
-	height: 100px;
-	overflow: true;
+	height: 250px;
+	width: 400px;
+	overflow-y: scroll;
 	resize: none;
+	font-family: monospace;
 }
 
 .fnList {
 	display: flex;
 	flex-direction: column-reverse;
 	align-items: flex-start;
+	overflow: true;
 }
 
 .fnEntry {
 	display: flex;
 	flex: none;
+	flex-direction: row;
 	height: 100%;
 	width: 100%;
-	border: 1px solid black;
+/*	border: 1px solid black;*/
+}
+
+.codetext {
+	overflow-y: scroll;
+	white-space: pre-wrap;
+	font-family: monospace;
 }
