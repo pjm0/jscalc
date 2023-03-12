@@ -6,6 +6,7 @@
 const cos = Math.cos;
 const sin = Math.sin;
 const abs = Math.abs;
+const atan2 = Math.atan2;
 const floor = Math.floor;
 const round = Math.round;
 const PI = Math.PI;
@@ -36,17 +37,16 @@ const initMainViewport = ()=>{
 	return initViewport(600);
 }
 const initPreviewViewport = ()=>{
-	return initViewport(300);
+	return initViewport(200);
 }
 const initBtn = (text)=>{
 	const submitBtn = document.createElement("button");
 	submitBtn.innerHTML	= text;
-	document.body.appendChild(submitBtn);
+	//parent.appendChild(submitBtn);
 	return submitBtn;
 }
-
+const fnInput = document.createElement("textarea");
 const initFnInput = ()=>{
-	const fnInput = document.createElement("textarea");
 	fnInput.setAttribute("placeholder", "(x,y)=>[1,x,y]")
 	fnInput.innerHTML = localStorage.getItem("function");//;
 	document.body.appendChild(fnInput);
@@ -60,22 +60,33 @@ const initDataURLField = ()=>{
 	return URLfield;
 }
 const initFnEntry = (fnText)=>{
-console.log(fnText);
 	const entry = document.createElement("div");
+	const reloadBtn = initBtn("Reload");
+	const deleteBtn = initBtn("Delete");
 	const viewport = initPreviewViewport();
 	const codeText = document.createElement("div");
 	codeText.setAttribute("class", "codetext");
 	codeText.innerText=fnText;
-	console.log("fntext\n",fnText)
-	console.log("codetext\n", codeText.innerText);
 	entry.appendChild(viewport.canvas);		try {
 		viewport.plotFunctionRGB(eval(fnText));
 		//viewport.plotFunctionRGB(eval(fnText));
 	} catch (e) {
 		console.log(e);
 	}
+	entry.appendChild(reloadBtn);
+	entry.appendChild(deleteBtn);
 	entry.appendChild(codeText);
 	entry.setAttribute("class","fnList");
+	deleteBtn.onclick = (e) => {
+		// Delete this node from the parent node
+	}
+	reloadBtn.onclick = (e) => {
+		// Update localstorage "function"
+		localStorage.setItem("function", fnText);
+		fnInput.value = fnText;	
+		fnInput.oninput();
+		console.log(fnInput.innerText, "!!?!");
+	}
 	return entry;
 }
 const initFnList = ()=>{
@@ -91,9 +102,6 @@ const initFnList = ()=>{
 	}
 
 	for (let i=0; i<fns.length; i++) {
-		console.log(fns);
-		console.log(i);
-		console.log(fns[i], "!!!!!!!!!!");
 		container.appendChild(initFnEntry(fns[i]));
 	}
 	localStorage.setItem("fns", JSON.stringify(fns.map(btoa)));
@@ -114,16 +122,19 @@ const main = ()=>{
 	const canvasSizeInput = initCanvasSize();
 	const fnList = initFnList();
 	const previewViewport = initPreviewViewport();
-	const submitBtn = initBtn("Render");
-	const saveBtn = initBtn("Save");
-	const clearBtn = initBtn("Clear all");
+	const renderBtn = initBtn("Render", document.body);
+	document.body.appendChild(renderBtn);
+	const saveBtn = initBtn("Save", document.body);
+	document.body.appendChild(saveBtn);
+	const clearBtn = initBtn("Clear all", document.body);
+		document.body.appendChild(clearBtn);
 	const fnInput = initFnInput();
 	const urlField = initDataURLField();
 	const element = document.body;
 	element.setAttribute("style","border:1px solid black");
 	document.body.appendChild(fnList);
 	
-	submitBtn.onclick = ((e) => {
+	renderBtn.onclick = ((e) => {
 		localStorage.setItem("function", fnInput.value);
 		mainViewport.plotFunctionRGB(eval(fnInput.value));
 	});

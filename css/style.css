@@ -1,8 +1,10 @@
 body {
-/*		display: flex;
-	flex-direction: column;*/
-}
 
+}
+div {
+	border-style: solid;
+	border-width: 1px;
+}
 textarea {
 	height: 250px;
 	width: 400px;
@@ -23,8 +25,7 @@ textarea {
 	flex: none;
 	flex-direction: row;
 	height: 100%;
-	width: 100%;
-/*	border: 1px solid black;*/
+	width: 400px;
 }
 
 .codetext {
