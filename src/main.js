@@ -51,18 +51,18 @@ const initFnInput = ()=>{
 	let fn = localStorage.getItem("function");
 	if (fn === null) {
 		fn = `(x, y) => {
-			x -= 0.5;
-			x *= 20;
-			y -= 0.5;
-			y *= 20;
-			let r,g,b;
-			r = (x**2+y**2)**0.5;
-			r = (1+cos(r*2*PI))/2;
-			g = 6*atan2(y,x)/(2*PI);
-			g -= floor(g);
-			b = 1-0.5*g;
-			return [r,g,b];
-		}`;
+	x -= 0.5;
+	x *= 20;
+	y -= 0.5;
+	y *= 20;
+	let r,g,b;
+	r = (x**2+y**2)**0.5;
+	r = (1+cos(r*2*PI))/2;
+	g = 6*atan2(y,x)/(2*PI);
+	g -= floor(g);
+	b = 1-0.5*g;
+	return [r,g,b];
+}`;
 		localStorage.setItem("function", fn);
 	} 
 	fnInput.innerHTML = fn;
