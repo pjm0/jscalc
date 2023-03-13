@@ -127,7 +127,7 @@ const main = ()=>{
 	const saveBtn = initBtn("Save", document.body);
 	document.body.appendChild(saveBtn);
 	const clearBtn = initBtn("Clear all", document.body);
-		document.body.appendChild(clearBtn);
+	document.body.appendChild(clearBtn);
 	const fnInput = initFnInput();
 	const urlField = initDataURLField();
 	const element = document.body;
@@ -146,7 +146,19 @@ const main = ()=>{
 		let fns;
 		if (json === null) {
 			fns = new Set();
-			//fns.add("(x,y)=>[1,x,y]");
+			fns.add(`(x, y) => {
+				x -= 0.5;
+				x *= 20;
+				y -= 0.5;
+				y *= 20;
+				let r,g,b;
+				b = (x**2+y**2)**0.5;
+				b = (1+cos(r*2*PI))/2;
+				g = 6*atan2(y,x)/(2*PI);
+				g -= floor(g);
+				r = 1-0.5*g;
+				return [r,g,b];
+			}`);
 		} else {
 			fns = new Set(JSON.parse(localStorage.getItem("fns")).map(atob));
 		}
