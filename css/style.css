@@ -5,8 +5,12 @@ body {
 .mainViewport {
 	margin: auto;
 }
+div {
+	border-radius: 10px;
+}
 
 .intro {
+		box-shadow: -3px 3px rgba(0,0,0,0.1);
 		margin-right: 15%;
 			margin-left: 15%;
 			margin-bottom: 50px;
@@ -19,20 +23,42 @@ textarea {
 /*	margin: auto;*/
 /*	width: auto;*/
 margin-top: 5%;
-margin-left: 5%;
+margin-left: 0%;
 margin-right: 0;
-	height: 100%;
+	min-height: 150px;
 /*	height: 250px;
 	width: 250px;*/
+	resize: none;
 	overflow-y: scroll;
 /*	resize: none;*/
 	font-family: monospace;
 }
-.fnEditor {
+
+.mainViewport {
+box-shadow: -3px 3px rgba(0,0,0,0.1);
+ resize: none;
+	aspect-ratio: 1 / 1;
+}
+
+.fnEditor  {
+box-shadow: -3px 3px rgba(0,0,0,0.1);
 	margin-top: 5%;
 	margin-right: 15%;
 	margin-left: 15%;
-	padding: 5%;
+	padding: 3%;
+	border-style: solid;
+	border-width: 1px;
+    display: inline-flex;
+	flex-direction: row;
+	align-items: stretch;
+	flex-wrap: wrap;
+}
+.fnEntry {
+box-shadow: -3px 3px rgba(0,0,0,0.1);
+	margin-top: 5%;
+	margin-right: 15%;
+	margin-left: 15%;
+	padding: 3%;
 	border-style: solid;
 	border-width: 1px;
     display: inline-flex;
@@ -43,8 +69,9 @@ margin-right: 0;
 .fnEditorInputs {
 		display: flex;
 	flex-direction: column;
+	flex-grow: 3;
 /*	margin : auto;*/
-	padding: 30px;
+	padding-left: 5%;
 /*	border-style: solid;
 	border-width: 1px;*/
     display: inline-flex;
@@ -62,17 +89,16 @@ margin-right: 0;
 .fnList {
 	display: flex;
 	flex-direction: column-reverse;
-	align-items: flex-start;
 	overflow: true;
 }
 
-.fnEntry {
+/*.fnEntry {
 /*	display: flex;*/
 /*	flex: auto;*/
-	flex-direction: row;
-	height: 100%;
-	width: 400px;
-}
+
+/*	flex-direction: row;
+
+}*/
 
 .codetext {
 	height: 250px;

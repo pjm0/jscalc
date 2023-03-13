@@ -85,6 +85,7 @@ const initDataURLField = ()=>{
 
 const initFnEntry = (fnText)=>{
 	const entry = document.createElement("div");
+	//entry.setAttribute("class", "fnEditor");
 	const reloadBtn = initBtn("Reload");
 	const deleteBtn = initBtn("Delete");
 	const viewport = initPreviewViewport();
@@ -97,10 +98,13 @@ const initFnEntry = (fnText)=>{
 	} catch (e) {
 		console.log(e);
 	}
-	entry.appendChild(reloadBtn);
-	entry.appendChild(deleteBtn);
-	entry.appendChild(codeText);
-	entry.setAttribute("class","fnList");
+		const btnPanel = document.createElement("div");
+btnPanel.setAttribute("class", "btnPanel");
+	btnPanel.appendChild(reloadBtn);
+	btnPanel.appendChild(deleteBtn);
+	btnPanel.appendChild(codeText);
+	entry.appendChild(btnPanel);
+	entry.setAttribute("class","fnEntry");
 	deleteBtn.onclick = (e) => {
 		// Delete this node from the parent node
 	}
