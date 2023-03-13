@@ -14,7 +14,7 @@ const PI = Math.PI;
 const initCanvasSize = () => {
 	const canvasSizeInput = document.createElement("input");
 	canvasSizeInput.setAttribute("type", "number");
-	canvasSizeInput.setAttribute("value", "512");
+	canvasSizeInput.setAttribute("value", "400");
 	document.body.appendChild(canvasSizeInput);
 
 	return canvasSizeInput;
@@ -34,7 +34,7 @@ const initViewport = (size)=>{
 	return viewport;
 }
 const initMainViewport = ()=>{
-	return initViewport(600);
+	return initViewport(400);
 }
 const initPreviewViewport = ()=>{
 	return initViewport(200);

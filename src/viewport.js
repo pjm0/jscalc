@@ -1,8 +1,8 @@
 function floatColorToHex(colorRGB) {
     let colorHex = (0xFF000000 +
-    Math.floor(colorRGB[0] * 255) * 0x00010000 +
+    Math.floor(colorRGB[2] * 255) * 0x00010000 +
     Math.floor(colorRGB[1] * 255) * 0x00000100 +
-    Math.floor(colorRGB[2] * 255));
+    Math.floor(colorRGB[0] * 255));
     return colorHex
 }
 
