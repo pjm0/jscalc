@@ -64,9 +64,8 @@ const initFnInput = ()=>{
 			return [r,g,b];
 		}`;
 		localStorage.setItem("function", fn);
-	} else {
-		fnInput.innerHTML = fn;
-	}
+	} 
+	fnInput.innerText = fn;
 	document.body.appendChild(fnInput);
 	return fnInput;
 }
