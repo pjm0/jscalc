@@ -48,7 +48,25 @@ const initBtn = (text)=>{
 const fnInput = document.createElement("textarea");
 const initFnInput = ()=>{
 	fnInput.setAttribute("placeholder", "(x,y)=>[1,x,y]")
-	fnInput.innerHTML = localStorage.getItem("function");//;
+	let fn = localStorage.getItem("function");
+	if (fn === null) {
+		fn = `(x, y) => {
+			x -= 0.5;
+			x *= 20;
+			y -= 0.5;
+			y *= 20;
+			let r,g,b;
+			r = (x**2+y**2)**0.5;
+			r = (1+cos(r*2*PI))/2;
+			g = 6*atan2(y,x)/(2*PI);
+			g -= floor(g);
+			b = 1-0.5*g;
+			return [r,g,b];
+		}`;
+		localStorage.setItem("function", fn);
+	} else {
+		fnInput.innerHTML = fn;
+	}
 	document.body.appendChild(fnInput);
 	return fnInput;
 }
@@ -146,19 +164,6 @@ const main = ()=>{
 		let fns;
 		if (json === null) {
 			fns = new Set();
-			fns.add(`(x, y) => {
-				x -= 0.5;
-				x *= 20;
-				y -= 0.5;
-				y *= 20;
-				let r,g,b;
-				b = (x**2+y**2)**0.5;
-				b = (1+cos(r*2*PI))/2;
-				g = 6*atan2(y,x)/(2*PI);
-				g -= floor(g);
-				r = 1-0.5*g;
-				return [r,g,b];
-			}`);
 		} else {
 			fns = new Set(JSON.parse(localStorage.getItem("fns")).map(atob));
 		}
