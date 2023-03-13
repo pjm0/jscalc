@@ -9,21 +9,35 @@ const abs = Math.abs;
 const atan2 = Math.atan2;
 const floor = Math.floor;
 const round = Math.round;
+const ceil = Math.ceil;
 const PI = Math.PI;
+const TAU = 2*Math.PI;
+const DEMO_FN =  `(x, y) => {
+    x -= 0.5;
+    x *= 20;
+    y -= 0.5;
+    y *= 20;
+    let r,g,b;
+    r = (x**2+y**2)**0.5;
+    r = (1+cos(r*2*PI))/2;
+    g = 6*atan2(y,x)/(2*PI);
+    g -= floor(g);
+    b = 1-0.5*g;
+    return [r,g,b];
+}`;
+const scalars = [];
 
 const initCanvasSize = () => {
 	const canvasSizeInput = document.createElement("input");
 	canvasSizeInput.setAttribute("type", "number");
 	canvasSizeInput.setAttribute("value", "400");
-	document.body.appendChild(canvasSizeInput);
-
 	return canvasSizeInput;
 }
 
 const initCanvas = ()=>{
 	const canvas = document.createElement("canvas");
 	canvas.setAttribute("style","border:1px solid black")
-	document.body.appendChild(canvas);
+	//document.body.appendChild(canvas);
 	return canvas;
 }
 const initViewport = (size)=>{
@@ -34,10 +48,15 @@ const initViewport = (size)=>{
 	return viewport;
 }
 const initMainViewport = ()=>{
-	return initViewport(400);
+	const viewport =initViewport(400);
+		viewport.canvas.setAttribute("class", "mainViewport");
+		return viewport;
+
 }
 const initPreviewViewport = ()=>{
-	return initViewport(200);
+	const viewport =initViewport(200);
+		viewport.canvas.setAttribute("class", "previewViewport");
+		return viewport;
 }
 const initBtn = (text)=>{
 	const submitBtn = document.createElement("button");
@@ -50,23 +69,10 @@ const initFnInput = ()=>{
 	fnInput.setAttribute("placeholder", "(x,y)=>[1,x,y]")
 	let fn = localStorage.getItem("function");
 	if (fn === null) {
-		fn = `(x, y) => {
-	x -= 0.5;
-	x *= 20;
-	y -= 0.5;
-	y *= 20;
-	let r,g,b;
-	r = (x**2+y**2)**0.5;
-	r = (1+cos(r*2*PI))/2;
-	g = 6*atan2(y,x)/(2*PI);
-	g -= floor(g);
-	b = 1-0.5*g;
-	return [r,g,b];
-}`;
+		fn = DEMO_FN;
 		localStorage.setItem("function", fn);
 	} 
 	fnInput.innerHTML = fn;
-	document.body.appendChild(fnInput);
 	return fnInput;
 }
 const initDataURLField = ()=>{
@@ -76,6 +82,7 @@ const initDataURLField = ()=>{
 	document.body.appendChild(URLfield);
 	return URLfield;
 }
+
 const initFnEntry = (fnText)=>{
 	const entry = document.createElement("div");
 	const reloadBtn = initBtn("Reload");
@@ -136,26 +143,39 @@ const main = ()=>{
 	// }
 	//initFnList(fns);
 	const mainViewport = initMainViewport();
-	const canvasSizeInput = initCanvasSize();
+	document.body.appendChild(mainViewport.canvas);
 	const fnList = initFnList();
+
+	const fnEditor = document.createElement("div");
+		fnEditor.setAttribute("class", "fnEditor");
+
 	const previewViewport = initPreviewViewport();
+	fnEditor.appendChild(previewViewport.canvas);
+	const fnEditorControls = document.createElement("div");
+			fnEditorControls.setAttribute("class", "fnEditorControls");
+	const fnEditorInputs = document.createElement("div");
+			fnEditorInputs.setAttribute("class", "fnEditorInputs");
+
+	const canvasSizeInput = initCanvasSize();
+	fnEditorControls.appendChild(canvasSizeInput);
 	const renderBtn = initBtn("Render", document.body);
-	document.body.appendChild(renderBtn);
+	fnEditorControls.appendChild(renderBtn);
 	const saveBtn = initBtn("Save", document.body);
-	document.body.appendChild(saveBtn);
+	fnEditorControls.appendChild(saveBtn);
 	const clearBtn = initBtn("Clear all", document.body);
-	document.body.appendChild(clearBtn);
+	fnEditorControls.appendChild(clearBtn);
 	const fnInput = initFnInput();
-	const urlField = initDataURLField();
-	const element = document.body;
-	element.setAttribute("style","border:1px solid black");
+	fnEditorInputs.appendChild(fnEditorControls);
+	fnEditorInputs.appendChild(fnInput);
+	fnEditor.appendChild(fnEditorInputs);
+	document.body.appendChild(fnEditor);
 	document.body.appendChild(fnList);
-	
+	mainViewport.plotFunctionRGB(eval(fnInput.value));
 	renderBtn.onclick = ((e) => {
 		localStorage.setItem("function", fnInput.value);
 		mainViewport.plotFunctionRGB(eval(fnInput.value));
 	});
-	canvasSizeInput.oninput = ((e)=>{mainViewport.resize(e.target.valueAsNumber,e.target.valueAsNumber)})
+	canvasSizeInput.onchange = ((e)=>{mainViewport.resize(e.target.valueAsNumber,e.target.valueAsNumber)})
 	saveBtn.onclick = ((e) => {
 		//
 		const json = localStorage.getItem("fns");
