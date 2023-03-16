@@ -10,6 +10,7 @@ const atan2 = Math.atan2;
 const floor = Math.floor;
 const round = Math.round;
 const ceil = Math.ceil;
+const range = n => Array.from(Array(n).keys())
 const PI = Math.PI;
 const TAU = 2*Math.PI;
 const DEMO_FN =  `(x, y) => {
@@ -109,11 +110,9 @@ btnPanel.setAttribute("class", "btnPanel");
 		// Delete this node from the parent node
 	}
 	reloadBtn.onclick = (e) => {
-		// Update localstorage "function"
 		localStorage.setItem("function", fnText);
 		fnInput.value = fnText;	
 		fnInput.oninput();
-		console.log(fnInput.innerText, "!!?!");
 	}
 	return entry;
 }
@@ -207,6 +206,8 @@ const main = ()=>{
 	fnInput.oninput = (() => {
 		localStorage.setItem("function", fnInput.value);
 		try {
+			const f = eval(fnInput.value);
+			console.log ("f,f.length",f,f.length);
 			previewViewport.plotFunctionRGB(eval(fnInput.value));
 		} catch (e) {
 			console.log(e);

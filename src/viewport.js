@@ -1,15 +1,15 @@
 function floatColorToHex(colorRGB) {
     let colorHex = (0xFF000000 +
-    Math.floor(colorRGB[2] * 255) * 0x00010000 +
-    Math.floor(colorRGB[1] * 255) * 0x00000100 +
-    Math.floor(colorRGB[0] * 255));
+        Math.floor(colorRGB[2] * 255) * 0x00010000 +
+        Math.floor(colorRGB[1] * 255) * 0x00000100 +
+        Math.floor(colorRGB[0] * 255));
     return colorHex
 }
 
 function dotProduct(v1, v2) {
     return (v1[0] * v2[0] +
-            v1[1] * v2[1] +
-            v1[2] * v2[2]);
+        v1[1] * v2[1] +
+        v1[2] * v2[2]);
 }
 
 function trueAverage(colors) {
@@ -39,73 +39,86 @@ class Viewport {
     }
     setCanvas(canvas){
         this.canvas = canvas;  //document.querySelector("canvas");
-            this.context = this.canvas.getContext("2d");
+        this.context = this.canvas.getContext("2d");
         this.initBuffer();}
-    initBuffer() {
-        this.img = this.context.createImageData(this.width, this.height);
-        this.buffer = new Uint32Array(this.img.data.buffer);
-    }
+        initBuffer() {
+            this.img = this.context.createImageData(this.width, this.height);
+            this.buffer = new Uint32Array(this.img.data.buffer);
+        }
 
-    drawPixel(x, y, color) {
-        this.buffer[x + y * this.width] = color;
-    }
-    
-    plotFunctionRGB(f, samples=10, fuzz=1) {
+        drawPixel(x, y, color) {
+            this.buffer[x + y * this.width] = color;
+        }
 
-        for (let i=0; i<this.width; i++) {
-            for (let j=0; j<this.height; j++) {
+        plotFunctionRGB(f, samples=10, fuzz=1) {
+            this.i=0;
+            const k = 500;
+            this.initBuffer();
+            clearInterval(this.interval);
+            const g = () => {
+                this.drawDeadline = new Date().getTime()+0.95*k;
+                for (; this.i<this.width&&new Date().getTime()<this.drawDeadline; this.i++) {
+                    let i = this.i;
+                    for (let j=0; j<this.height; j++) {
 
-                let color;
-                if (samples<2) {
-                    color = f(i/this.width, j/this.height);
-                } else {
-                    let colors = [];
-                    for (let n=0;n<3;n++) {
-                        let x = (i + fuzz*(Math.random()-0.5))/this.width;
-                        let y = (j + fuzz*(Math.random()-0.5))/this.height;
-                        colors.push(f(x, y));
+                        let color;
+                        if (samples<2) {
+                            color = f(i/this.width, j/this.height);
+                        } else {
+                            let colors = [];
+                            for (let n=0;n<1;n++) {
+                                let x = (i + fuzz*(Math.random()-0.5))/this.width;
+                                let y = (j + fuzz*(Math.random()-0.5))/this.height;
+                                colors.push(f(x, y));
+                            }
+                            color = trueAverage(colors);
+                        }
+                        this.drawPixel(i, j, floatColorToHex(color));
                     }
-                    color = trueAverage(colors);
                 }
-                this.drawPixel(i, j, floatColorToHex(color));
+                this.updateCanvas();
+                if (this.i>=this.width) {
+                    clearInterval(this.interval);
+                }
+                
             }
-        }
-        this.updateCanvas();
-    }
+            this.interval = setInterval(g,k);
 
-    plotFunction(f) {
-        for (let i=0; i<this.width; i++) {
-            for (let j=0; j<this.height; j++) {
-                let color = f(i/this.width, j/this.height);
-                this.drawPixel(i, j, color);
+        }
+
+        plotFunction(f) {
+            for (let i=0; i<this.width; i++) {
+                for (let j=0; j<this.height; j++) {
+                    let color = f(i/this.width, j/this.height);
+                    this.drawPixel(i, j, color);
+                }
             }
+            this.updateCanvas();
         }
-        this.updateCanvas();
-    }
 
-    updateCanvas() {
-        this.context.putImageData(this.img, 0, 0);
-    }
+        updateCanvas() {
+            this.context.putImageData(this.img, 0, 0);
+        }
 
-    resize(width, height) {
-        this.canvas.width = width;
-        this.canvas.height = height;
-        this.initBuffer();
-    }
+        resize(width, height) {
+            this.canvas.width = width;
+            this.canvas.height = height;
+            this.initBuffer();
+        }
 
-    get width() {
-        return this.canvas.width;
-    }
+        get width() {
+            return this.canvas.width;
+        }
 
-    get height() {
-        return this.canvas.height;
-    }
+        get height() {
+            return this.canvas.height;
+        }
 
-    get midX() {
-        return this.canvas.width / 2;
-    }
+        get midX() {
+            return this.canvas.width / 2;
+        }
 
-    get midY() {
-        return this.canvas.height / 2;
+        get midY() {
+            return this.canvas.height / 2;
+        }
     }
-}
