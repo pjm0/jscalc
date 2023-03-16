@@ -42,7 +42,7 @@ class Viewport {
         this.context = this.canvas.getContext("2d");
         this.initBuffer();}
         initBuffer() {
-            this.img = this.context.createImageData(this.width, this.height);
+            this.img = this.context.createImageData(this.canvas.width, this.canvas.height);
             this.buffer = new Uint32Array(this.img.data.buffer);
         }
 
@@ -53,22 +53,23 @@ class Viewport {
         plotFunctionRGB(f, samples=10, fuzz=1) {
             this.i=0;
             const k = 500;
+            this.resize();
             this.initBuffer();
             clearInterval(this.interval);
             const g = () => {
                 this.drawDeadline = new Date().getTime()+0.95*k;
-                for (; this.i<this.width&&new Date().getTime()<this.drawDeadline; this.i++) {
+                for (; this.i<this.canvas.width&&new Date().getTime()<this.drawDeadline; this.i++) {
                     let i = this.i;
-                    for (let j=0; j<this.height; j++) {
+                    for (let j=0; j<this.canvas.height; j++) {
 
                         let color;
                         if (samples<2) {
-                            color = f(i/this.width, j/this.height);
+                            color = f(i/this.canvas.width, j/this.height);
                         } else {
                             let colors = [];
                             for (let n=0;n<1;n++) {
-                                let x = (i + fuzz*(Math.random()-0.5))/this.width;
-                                let y = (j + fuzz*(Math.random()-0.5))/this.height;
+                                let x = (i + fuzz*(Math.random()-0.5))/this.canvas.width;
+                                let y = (j + fuzz*(Math.random()-0.5))/this.canvas.height;
                                 colors.push(f(x, y));
                             }
                             color = trueAverage(colors);
@@ -77,7 +78,7 @@ class Viewport {
                     }
                 }
                 this.updateCanvas();
-                if (this.i>=this.width) {
+                if (this.i>=this.canvas.width) {
                     clearInterval(this.interval);
                 }
                 
@@ -100,19 +101,30 @@ class Viewport {
             this.context.putImageData(this.img, 0, 0);
         }
 
-        resize(width, height) {
-            this.canvas.width = width;
-            this.canvas.height = height;
+        reqResize(width, height) {
+            this.width = width;
+            this.height = height;
+        }
+        resize() {
+            this.canvas.width = this.width;
+            this.canvas.height = this.height;
             this.initBuffer();
         }
 
-        get width() {
-            return this.canvas.width;
-        }
+        // get width() {
+        //     return this.width;
+        // }
 
-        get height() {
-            return this.canvas.height;
-        }
+        // get height() {
+        //     return this.height;
+        // }
+        // set width(width) {
+        //     this._width = width;
+        // }
+
+        // set height(height) {
+        //     this._height = height;
+        // }
 
         get midX() {
             return this.canvas.width / 2;

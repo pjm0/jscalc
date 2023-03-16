@@ -45,7 +45,7 @@ const initViewport = (size)=>{
 	const canvas = initCanvas();
 	const viewport = new Viewport();
 	viewport.setCanvas(canvas);
-	viewport.resize(size, size);
+	viewport.reqResize(size, size);
 	return viewport;
 }
 const initMainViewport = ()=>{
@@ -178,7 +178,7 @@ const main = ()=>{
 		localStorage.setItem("function", fnInput.value);
 		mainViewport.plotFunctionRGB(eval(fnInput.value));
 	});
-	canvasSizeInput.onchange = ((e)=>{mainViewport.resize(e.target.valueAsNumber,e.target.valueAsNumber)})
+	canvasSizeInput.onchange = ((e)=>{mainViewport.reqResize(e.target.valueAsNumber,e.target.valueAsNumber)})
 	saveBtn.onclick = ((e) => {
 		//
 		const json = localStorage.getItem("fns");
