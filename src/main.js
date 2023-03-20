@@ -10,6 +10,8 @@ const atan2 = Math.atan2;
 const floor = Math.floor;
 const round = Math.round;
 const ceil = Math.ceil;
+const random = Math.random;
+const quantize = (n,divisions) => round(n*divisions)/divisions;
 const range = n => Array.from(Array(n).keys())
 const PI = Math.PI;
 const TAU = 2*Math.PI;
@@ -206,6 +208,8 @@ const main = ()=>{
 	fnEditorControls.appendChild(saveBtn);
 	const clearBtn = initBtn("Clear all", document.body);
 	fnEditorControls.appendChild(clearBtn);
+	const exportFramesBtn = initBtn("Export frames", document.body);
+	fnEditorControls.appendChild(exportFramesBtn);
 	const fnInput = initFnInput();
 	fnEditorInputs.appendChild(fnEditorControls);
 	fnEditorInputs.appendChild(fnInput);
@@ -218,6 +222,11 @@ document.body.appendChild(fnList);
 	//mainViewport.plotFunctionRGB(eval(fnInput.value));
 	renderBtn.onclick = ((e) => {
 		localStorage.setItem("function", fnInput.value);
+		mainViewport.plotFunctionRGB(eval(fnInput.value));
+	});
+		exportFramesBtn.onclick = ((e) => {
+		localStorage.setItem("function", fnInput.value);
+		mainViewport.downloadEnabled = true;
 		mainViewport.plotFunctionRGB(eval(fnInput.value));
 	});
 	canvasSizeInput.onchange = ((e)=>{mainViewport.reqResize(e.target.valueAsNumber,e.target.valueAsNumber)})

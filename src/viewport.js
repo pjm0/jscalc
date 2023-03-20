@@ -34,7 +34,7 @@ function trueAverage(colors) {
 
 class Viewport {
     constructor() {
-        const DEFAULT_FRAMES = 210
+        const DEFAULT_FRAMES = 100
         this.nFrames = DEFAULT_FRAMES
         this.downloadEnabled = false;
         // this.canvas = canvas;  //document.querySelector("canvas");
@@ -83,7 +83,7 @@ class Viewport {
                         a.setAttribute("textcontent", `${this.t}.png`);
                         a.setAttribute("href", this.canvas.toDataURL());
                         const idNumber = this.t.toString().padStart(3, "0");
-                        a.setAttribute("download", `frame${idNumber}.png`);
+                        a.setAttribute("download", `s1_frame${idNumber}.png`);
                         //const div = document.createElement("div");
                         //div.appendChild(a);
                         a.click();
@@ -109,6 +109,7 @@ class Viewport {
                     this.i=0;
                     clearInterval(this.interval);
                     this.updateCanvas();
+                    this.downloadEnabled = false;
                 }
                 
             }
