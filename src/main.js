@@ -14,17 +14,17 @@ const range = n => Array.from(Array(n).keys())
 const PI = Math.PI;
 const TAU = 2*Math.PI;
 const DEMO_FN =  `(x, y) => {
-    x -= 0.5;
-    x *= 20;
-    y -= 0.5;
-    y *= 20;
-    let r,g,b;
-    r = (x**2+y**2)**0.5;
-    r = (1+cos(r*2*PI))/2;
-    g = 6*atan2(y,x)/(2*PI);
-    g -= floor(g);
-    b = 1-0.5*g;
-    return [r,g,b];
+	x -= 0.5;
+	x *= 20;
+	y -= 0.5;
+	y *= 20;
+	let r,g,b;
+	r = (x**2+y**2)**0.5;
+	r = (1+cos(r*2*PI))/2;
+	g = 6*atan2(y,x)/(2*PI);
+	g -= floor(g);
+	b = 1-0.5*g;
+	return [r,g,b];
 }`;
 const scalars = [];
 
@@ -38,7 +38,7 @@ const initCanvasSize = () => {
 const initCanvas = ()=>{
 	const canvas = document.createElement("canvas");
 	canvas.setAttribute("style","border:1px solid black")
-	//document.body.appendChild(canvas);
+//document.body.appendChild(canvas);
 	return canvas;
 }
 const initViewport = (size)=>{
@@ -49,20 +49,26 @@ const initViewport = (size)=>{
 	return viewport;
 }
 const initMainViewport = ()=>{
-	const viewport =initViewport(400);
+	// const viewports = [];
+	// for (let i=0; i<100; i++) {
+		const viewport =initViewport(400);
 		viewport.canvas.setAttribute("class", "mainViewport");
 		return viewport;
+		// viewport.t = i;
+		// viewports.push(viewport);
+	// }
+	// return viewports;
 
 }
 const initPreviewViewport = ()=>{
 	const viewport =initViewport(200);
-		viewport.canvas.setAttribute("class", "previewViewport");
-		return viewport;
+	viewport.canvas.setAttribute("class", "previewViewport");
+	return viewport;
 }
 const initBtn = (text)=>{
 	const submitBtn = document.createElement("button");
 	submitBtn.innerHTML	= text;
-	//parent.appendChild(submitBtn);
+//parent.appendChild(submitBtn);
 	return submitBtn;
 }
 const fnInput = document.createElement("textarea");
@@ -74,19 +80,29 @@ const initFnInput = ()=>{
 		localStorage.setItem("function", fn);
 	} 
 	fnInput.innerHTML = fn;
+	fnInput.oninput = (() => {
+		localStorage.setItem("function", fnInput.value);
+		try {
+			const f = eval(fnInput.value);
+			console.log ("f,f.length",f,f.length);
+			previewViewport.plotFunctionRGB(eval(fnInput.value));
+		} catch (e) {
+			console.log(e);
+		}
+	});
 	return fnInput;
 }
 const initDataURLField = ()=>{
 	const URLfield = document.createElement("div");
 
-	//URLfield.innerHTML = localStorage.getItem("function");//;
+//URLfield.innerHTML = localStorage.getItem("function");//;
 	document.body.appendChild(URLfield);
 	return URLfield;
 }
 
 const initFnEntry = (fnText)=>{
 	const entry = document.createElement("div");
-	//entry.setAttribute("class", "fnEditor");
+//entry.setAttribute("class", "fnEditor");
 	const reloadBtn = initBtn("Reload");
 	const deleteBtn = initBtn("Delete");
 	const viewport = initPreviewViewport();
@@ -95,19 +111,19 @@ const initFnEntry = (fnText)=>{
 	codeText.innerText=fnText;
 	entry.appendChild(viewport.canvas);		try {
 		viewport.plotFunctionRGB(eval(fnText));
-		//viewport.plotFunctionRGB(eval(fnText));
+//viewport.plotFunctionRGB(eval(fnText));
 	} catch (e) {
 		console.log(e);
 	}
-		const btnPanel = document.createElement("div");
-btnPanel.setAttribute("class", "btnPanel");
+	const btnPanel = document.createElement("div");
+	btnPanel.setAttribute("class", "btnPanel");
 	btnPanel.appendChild(reloadBtn);
 	btnPanel.appendChild(deleteBtn);
 	btnPanel.appendChild(codeText);
 	entry.appendChild(btnPanel);
 	entry.setAttribute("class","fnEntry");
 	deleteBtn.onclick = (e) => {
-		// Delete this node from the parent node
+// Delete this node from the parent node
 	}
 	reloadBtn.onclick = (e) => {
 		localStorage.setItem("function", fnText);
@@ -117,9 +133,9 @@ btnPanel.setAttribute("class", "btnPanel");
 	return entry;
 }
 const initFnList = ()=>{
-	//let fns = ["((x,y)=>[1,0,1])","((x,y)=>[1,1,0])","((x,y)=>[0,1,1])"];//localStorage.getItem("fns");
-	//localStorage.getItem("fns");//
-	//localStorage.setItem("fns", JSON.stringify(fns.map(btoa)));
+//let fns = ["((x,y)=>[1,0,1])","((x,y)=>[1,1,0])","((x,y)=>[0,1,1])"];//localStorage.getItem("fns");
+//localStorage.getItem("fns");//
+//localStorage.setItem("fns", JSON.stringify(fns.map(btoa)));
 	let fns;
 	const container = document.createElement("div");
 	try {
@@ -136,28 +152,51 @@ const initFnList = ()=>{
 	return container;
 }
 
+// const initParamInput = (value=1)=>{
+// 	const container = document.createElement("div");
+// 	container.setAttribute("class", "paramInput");
+// 	const rangeInput = document.createElement("input");
+// 	rangeInput.setAttribute("type", "range");
+// 	rangeInput.setAttribute("value", value);
+// 	container.appendChild(rangeInput);
+// 	return container;
+// }
+
+// const initParamList = (n)=>{
+// //let fns = ["((x,y)=>[1,0,1])","((x,y)=>[1,1,0])","((x,y)=>[0,1,1])"];//localStorage.getItem("fns");
+// //localStorage.getItem("fns");//
+// //localStorage.setItem("fns", JSON.stringify(fns.map(btoa)));
+// 	let fns;
+// 	const container = document.createElement("div");
+
+// 	for (let i=0; i<n; i++) {
+// 		container.appendChild(initParamInput());
+// 	}
+
+// 	container.setAttribute("class", "paramList");
+// 	return container;
+// }
 
 const main = ()=>{
 
-	//const fns = ["((x,y)=>[1,0,1]),((x,y)=>[1,1,0])","((x,y)=>[0,1,1])"].map(btoa);//localStorage.getItem("fns");
-	//localStorage.setItem("fns", JSON.stringify(fns));
+//const fns = ["((x,y)=>[1,0,1]),((x,y)=>[1,1,0])","((x,y)=>[0,1,1])"].map(btoa);//localStorage.getItem("fns");
+//localStorage.setItem("fns", JSON.stringify(fns));
 // if (fns === null) {
-	// 	fns = []
-	// }
-	//initFnList(fns);
+// 	fns = []
+// }
+//initFnList(fns);
 	const mainViewport = initMainViewport();
 	document.body.appendChild(mainViewport.canvas);
-	const fnList = initFnList();
 
 	const fnEditor = document.createElement("div");
-		fnEditor.setAttribute("class", "fnEditor");
+	fnEditor.setAttribute("class", "fnEditor");
 
 	const previewViewport = initPreviewViewport();
 	fnEditor.appendChild(previewViewport.canvas);
 	const fnEditorControls = document.createElement("div");
-			fnEditorControls.setAttribute("class", "fnEditorControls");
+	fnEditorControls.setAttribute("class", "fnEditorControls");
 	const fnEditorInputs = document.createElement("div");
-			fnEditorInputs.setAttribute("class", "fnEditorInputs");
+	fnEditorInputs.setAttribute("class", "fnEditorInputs");
 
 	const canvasSizeInput = initCanvasSize();
 	fnEditorControls.appendChild(canvasSizeInput);
@@ -171,16 +210,19 @@ const main = ()=>{
 	fnEditorInputs.appendChild(fnEditorControls);
 	fnEditorInputs.appendChild(fnInput);
 	fnEditor.appendChild(fnEditorInputs);
+	// fnEditor.appendChild(initParamList(5));
+
 	document.body.appendChild(fnEditor);
-	document.body.appendChild(fnList);
-	mainViewport.plotFunctionRGB(eval(fnInput.value));
+const fnList = initFnList();
+document.body.appendChild(fnList);
+	//mainViewport.plotFunctionRGB(eval(fnInput.value));
 	renderBtn.onclick = ((e) => {
 		localStorage.setItem("function", fnInput.value);
 		mainViewport.plotFunctionRGB(eval(fnInput.value));
 	});
 	canvasSizeInput.onchange = ((e)=>{mainViewport.reqResize(e.target.valueAsNumber,e.target.valueAsNumber)})
 	saveBtn.onclick = ((e) => {
-		//
+//
 		const json = localStorage.getItem("fns");
 
 		let fns;
@@ -197,22 +239,12 @@ const main = ()=>{
 		}
 	});
 	clearBtn.onclick = ((e) => {
-		//
+//
 		localStorage.clear();
 		document.body.innerHTML = ""
 		return main();
 	});
 
-	fnInput.oninput = (() => {
-		localStorage.setItem("function", fnInput.value);
-		try {
-			const f = eval(fnInput.value);
-			console.log ("f,f.length",f,f.length);
-			previewViewport.plotFunctionRGB(eval(fnInput.value));
-		} catch (e) {
-			console.log(e);
-		}
-	});
 
 	fnInput.oninput();
 };

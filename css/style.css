@@ -32,6 +32,7 @@ margin-right: 0;
 	overflow-y: scroll;
 /*	resize: none;*/
 	font-family: monospace;
+	font-size: 100m%;
 }
 
 .mainViewport {

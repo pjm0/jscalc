@@ -34,8 +34,14 @@ function trueAverage(colors) {
 
 class Viewport {
     constructor() {
+        const DEFAULT_FRAMES = 210
+        this.nFrames = DEFAULT_FRAMES
+        this.downloadEnabled = false;
         // this.canvas = canvas;  //document.querySelector("canvas");
 
+    }
+    setNFrames(n){
+        this.nFrames = n;
     }
     setCanvas(canvas){
         this.canvas = canvas;  //document.querySelector("canvas");
@@ -50,36 +56,59 @@ class Viewport {
             this.buffer[x + y * this.width] = color;
         }
 
-        plotFunctionRGB(f, samples=10, fuzz=1) {
-            this.i=0;
-            const k = 500;
+        plotFunctionRGB(f, samples=0, fuzz=0) {
+            ;
+            const k = 50;
             this.resize();
             this.initBuffer();
             clearInterval(this.interval);
+            this.t=0
+            this.i=0
+            const nFrames = (f.length>2 && this.canvas.getAttribute("class") == "mainViewport")?this.nFrames:1;
             const g = () => {
                 this.drawDeadline = new Date().getTime()+0.95*k;
-                for (; this.i<this.canvas.width&&new Date().getTime()<this.drawDeadline; this.i++) {
-                    let i = this.i;
-                    for (let j=0; j<this.canvas.height; j++) {
-
-                        let color;
-                        if (samples<2) {
-                            color = f(i/this.canvas.width, j/this.height);
-                        } else {
-                            let colors = [];
-                            for (let n=0;n<1;n++) {
-                                let x = (i + fuzz*(Math.random()-0.5))/this.canvas.width;
-                                let y = (j + fuzz*(Math.random()-0.5))/this.canvas.height;
-                                colors.push(f(x, y));
-                            }
-                            color = trueAverage(colors);
+                for (; this.t<nFrames&&new Date().getTime()<this.drawDeadline;) {
+                    for (; this.i<this.canvas.width&&new Date().getTime()<this.drawDeadline; this.i++) {
+                        let i = this.i;
+                        for (let j=0; j<this.canvas.height; j++) {
+                            const color = f(i/this.canvas.width, j/this.height, this.t);
+                            this.drawPixel(i, j, floatColorToHex(color));
                         }
-                        this.drawPixel(i, j, floatColorToHex(color));
+                    }
+                    if (this.i>=this.canvas.width) {
+                        console.log(this.t)
+                        this.updateCanvas();
+                        if (this.downloadEnabled) {
+                        const a = document.createElement("a");
+                        a.setAttribute("textcontent", `${this.t}.png`);
+                        a.setAttribute("href", this.canvas.toDataURL());
+                        const idNumber = this.t.toString().padStart(3, "0");
+                        a.setAttribute("download", `frame${idNumber}.png`);
+                        //const div = document.createElement("div");
+                        //div.appendChild(a);
+                        a.click();
+                    }
+
+                        //document.body.appendChild(a);
+                        this.t++;
+                        this.i=0
+                        // this.setCanvas(document.createElement("canvas"));
+                        // this.canvas.setAttribute("id", this.t);
+                        // this.resize();
+                        // document.body.appendChild(this.canvas);
+                    }
+                    if (new Date().getTime()>=this.drawDeadline) {
+                        return;
                     }
                 }
+                // if (this.i>=this.canvas.width) {
                 this.updateCanvas();
-                if (this.i>=this.canvas.width) {
+                // }
+                if (this.t>=nFrames) {
+                    this.t = 0;//
+                    this.i=0;
                     clearInterval(this.interval);
+                    this.updateCanvas();
                 }
                 
             }
